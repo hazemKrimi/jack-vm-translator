@@ -4,6 +4,7 @@
 #include <regex>
 #include <fstream>
 #include <cctype>
+#include <vector>
 
 using namespace std;
 
@@ -33,7 +34,8 @@ private:
         {
             if (regex_search(text, matched, regex("^(.*)?(\\/\\/.*)")) || isEmptyLine(text))
             {
-                if (!isEmptyLine(matched[1])) {
+                if (!isEmptyLine(matched[1]))
+                {
                     string command = matched[1];
                     vmCode.append(command + '\n');
                 }
@@ -54,14 +56,52 @@ public:
         removeCommentsAndWhitespace();
     }
 
-    void printFile()
+    vector<vector<string>> getTokens()
     {
         stringstream vmCodeStream(vmCode);
         string text;
+        smatch matched;
+        vector<vector<string>> tokens;
 
         while (getline(vmCodeStream, text, '\n'))
         {
-            cout << text << endl;
+            vector<string> matchedVector;
+
+            if (regex_search(text, matched, regex("^(.*) (.*) (.*)")))
+            {
+                matchedVector.push_back(matched[1]);
+                matchedVector.push_back(matched[2]);
+                matchedVector.push_back(matched[3]);
+            }
+            else
+            {
+                matchedVector.push_back(text);
+            }
+            tokens.push_back(matchedVector);
+        }
+
+        return tokens;
+    }
+
+    void printFile()
+    {
+        vector<vector<string>> tokens = getTokens();
+
+        for (const auto &vec : tokens)
+        {
+            if (vec.size() > 1)
+            {
+                cout << vec[0] << "-";
+                if (vec.size() > 1)
+                    cout << vec[1] << "-";
+                if (vec.size() > 1)
+                    cout << vec[2];
+                cout << endl;
+            }
+            else
+            {
+                cout << vec[0] << endl;
+            }
         }
     }
 };
