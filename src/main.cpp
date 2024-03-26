@@ -22,13 +22,15 @@ int main(int argc, char* argv[])
 
     Parser parser(sourcePath);
 
-    parser.printFile();
+    vector<vector<string>> commands = parser.getCommands();
     
     string translatedPath = constructTranslatedPath(sourcePath);
 
-    Code code(translatedPath);
+    Code code(translatedPath, commands);
 
-    code.writeToFile();
-    
+    code.translate();
+
+    parser.closeFile();    
+    code.closeFile();    
     return 0;
 }

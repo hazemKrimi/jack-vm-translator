@@ -56,7 +56,7 @@ public:
         removeCommentsAndWhitespace();
     }
 
-    vector<vector<string>> getTokens()
+    vector<vector<string>> getCommands()
     {
         stringstream vmCodeStream(vmCode);
         string text;
@@ -83,25 +83,7 @@ public:
         return tokens;
     }
 
-    void printFile()
-    {
-        vector<vector<string>> tokens = getTokens();
-
-        for (const auto &vec : tokens)
-        {
-            if (vec.size() > 1)
-            {
-                cout << vec[0] << "-";
-                if (vec.size() > 1)
-                    cout << vec[1] << "-";
-                if (vec.size() > 1)
-                    cout << vec[2];
-                cout << endl;
-            }
-            else
-            {
-                cout << vec[0] << endl;
-            }
-        }
+    void closeFile() {
+        file.close();
     }
 };
