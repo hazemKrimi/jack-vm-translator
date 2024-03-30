@@ -22,6 +22,26 @@ private:
     string filename;
     vector<vector<string>> commands;
 
+    Segment determineSegment(string segment)
+    {
+        if (segment == "local")
+            return Segment::LCL;
+        if (segment == "argument")
+            return Segment::ARG;
+        if (segment == "this")
+            return Segment::THIS;
+        if (segment == "that")
+            return Segment::THAT;
+        if (segment == "static")
+            return Segment::STATIC;
+        if (segment == "temp")
+            return Segment::TEMP;
+        if (segment == "constant")
+            return Segment::CONSTANT;
+
+        return Segment::CONSTANT;
+    }
+
     string translatePush(Segment segment, int index)
     {
         stringstream output;
@@ -79,26 +99,6 @@ private:
 
         return output.str();
     };
-
-    Segment determineSegment(string segment)
-    {
-        if (segment == "local")
-            return Segment::LCL;
-        if (segment == "argument")
-            return Segment::ARG;
-        if (segment == "this")
-            return Segment::THIS;
-        if (segment == "that")
-            return Segment::THAT;
-        if (segment == "static")
-            return Segment::STATIC;
-        if (segment == "temp")
-            return Segment::TEMP;
-        if (segment == "constant")
-            return Segment::CONSTANT;
-
-        return Segment::CONSTANT;
-    }
 
     string translatePop(Segment segment, int index)
     {
