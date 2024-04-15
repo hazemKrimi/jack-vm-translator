@@ -15,6 +15,11 @@ enum Segment
     TEMP,
 };
 
+// TODO: Complete implementing these
+// Memory access commands: push, pop
+// Arithmetic commands: add, sub, neg
+// Logical commands: eq, gt, lt, and, or, not
+
 class Code
 {
 private:
