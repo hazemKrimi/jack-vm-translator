@@ -1,18 +1,23 @@
 #include <iostream>
 #include <regex>
-#include <parser.h>
-#include <code.h>
+#include "include/parser.h"
+#include "include/code.h"
 
 using namespace std;
 
 string constructTranslatedPath(string path) {
     size_t position = path.rfind(".vm");
 
-    return path.replace(position, 3, ".hack");
+    return path.replace(position, 3, ".asm");
 }
 
 int main(int argc, char* argv[])
 {
+    if (!argv[1]) {
+        cout << "You must specify a vm file path!" << endl;
+        return 1;
+    }
+    
     string sourcePath = argv[1];
 
     if (!regex_match(sourcePath, regex("^.+\\.vm"))) {
