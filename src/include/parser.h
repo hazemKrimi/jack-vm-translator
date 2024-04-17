@@ -61,7 +61,7 @@ public:
         stringstream vmCodeStream(vmCode);
         string text;
         smatch matched;
-        vector<vector<string>> tokens;
+        vector<vector<string>> commands;
 
         while (getline(vmCodeStream, text, '\n'))
         {
@@ -77,10 +77,10 @@ public:
             {
                 matchedVector.push_back(text);
             }
-            tokens.push_back(matchedVector);
+            commands.push_back(matchedVector);
         }
 
-        return tokens;
+        return commands;
     }
 
     void closeFile() {

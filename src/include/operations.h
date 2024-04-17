@@ -4,17 +4,17 @@
 
 using namespace std;
 
-ArithmeticOperator determineArithmeticOperator(string arithmeticOperator)
-{
-    if (arithmeticOperator == "add")
-        return ArithmeticOperator::ADD;
-    if (arithmeticOperator == "sub")
-        return ArithmeticOperator::SUB;
-    if (arithmeticOperator == "neg")
-        return ArithmeticOperator::NEG;
+// Operation determineOperation(string operation)
+// {
+//     if (operation == "add")
+//         return Operation::ADD;
+//     if (operation == "sub")
+//         return Operation::SUB;
+//     if (operation == "neg")
+//         return Operation::NEG;
 
-    return ArithmeticOperator::NEG;
-}
+//     return Operation::NEG;
+// }
 
 string translateAdd()
 {

@@ -9,20 +9,14 @@ enum Segment
     TEMP,
 };
 
-enum ArithmeticOperator {
-    ADD,
-    SUB,
-    NEG
-};
-
-enum ComparisonOperator {
-    EQ,
-    GT,
-    LT,
-};
-
-enum LogicalOperator {
-    AND,
-    OR,
-    NOT
-};
+// enum Operation {
+//     ADD,
+//     SUB,
+//     NEG,
+//     EQ,
+//     GT,
+//     LT,
+//     AND,
+//     OR,
+//     NOT
+// };

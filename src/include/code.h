@@ -2,8 +2,8 @@
 #include <fstream>
 #include <string>
 #include "types.h"
+#include "operations.h"
 #include "memory.h"
-#include "arithmetic.h"
 
 using namespace std;
 
@@ -32,14 +32,14 @@ public:
     void translate()
     {
         for (const auto &vec : commands)
-        {
+        {   
             if (vec.size() > 1)
             {
                 if (vec[0] == "push")
                 {
                     file << translatePush(filename, determineSegment(vec[1]), stoi(vec[2]));
                 }
-                else
+                if (vec[0] == "pop")
                 {
                     file << translatePop(filename, determineSegment(vec[1]), stoi(vec[2]));
                 }
@@ -47,23 +47,14 @@ public:
 
             if (vec.size() == 1)
             {
-                int op = determineArithmeticOperator(vec[0]);
+                if (vec[0] == "add")
+                    cout << translateAdd();
 
-                cout << op << " " << vec[0] << endl; 
+                if (vec[0] == "sub")
+                    cout << translateSub();
 
-                switch (determineArithmeticOperator(vec[0]))
-                {
-                case ArithmeticOperator::ADD:
-                    file << translateAdd();
-                    break;
-                case ArithmeticOperator::SUB:
-                    file << translateSub();
-                    break;
-                case ArithmeticOperator::NEG:
-                default:
-                    file << translateNeg();
-                    break;
-                }
+                if (vec[0] == "neg")
+                    cout << translateNeg();
             }
 
             file << endl;
