@@ -80,7 +80,7 @@ string translatePush(string filename, Segment segment, int index)
     output << "M=M+1" << endl;
 
     return output.str();
-};
+}
 
 string translatePop(string filename, Segment segment, int index)
 {
@@ -146,4 +146,4 @@ string translatePop(string filename, Segment segment, int index)
     output << "M=D" << endl;
 
     return output.str();
-};
+}

@@ -31,9 +31,9 @@ public:
 
     void translate()
     {
-        for (const auto &vec : commands)
-        {   
-            if (vec.size() > 1)
+        for (const vector<string> &vec : commands)
+        {
+            if (vec.size() == 3)
             {
                 if (vec[0] == "push")
                 {
@@ -44,17 +44,16 @@ public:
                     file << translatePop(filename, determineSegment(vec[1]), stoi(vec[2]));
                 }
             }
-
-            if (vec.size() == 1)
+            else if (vec.size() == 1)
             {
-                if (vec[0] == "add")
-                    cout << translateAdd();
+                if (vec.at(0) == "add")
+                    file << translateAdd();
 
-                if (vec[0] == "sub")
-                    cout << translateSub();
+                if (vec.at(0) == "sub")
+                    file << translateSub();
 
-                if (vec[0] == "neg")
-                    cout << translateNeg();
+                if (vec.at(0) == "neg")
+                    file << translateNeg();
             }
 
             file << endl;

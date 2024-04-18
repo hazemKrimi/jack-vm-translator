@@ -73,9 +73,9 @@ public:
                 matchedVector.push_back(matched[2]);
                 matchedVector.push_back(matched[3]);
             }
-            else
+            else if (regex_search(text, matched, regex("^(.*)")))
             {
-                matchedVector.push_back(text);
+                matchedVector.push_back(matched[1]);
             }
             commands.push_back(matchedVector);
         }
