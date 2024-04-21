@@ -7,16 +7,18 @@ enum Segment
     STATIC,
     CONSTANT,
     TEMP,
+    POINTER,
 };
 
-// enum Operation {
-//     ADD,
-//     SUB,
-//     NEG,
-//     EQ,
-//     GT,
-//     LT,
-//     AND,
-//     OR,
-//     NOT
-// };
+enum Operation
+{
+    ADD,
+    SUB,
+    NEG,
+    EQ,
+    GT,
+    LT,
+    AND,
+    OR,
+    NOT
+};

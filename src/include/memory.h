@@ -14,6 +14,8 @@ Segment determineSegment(string segment)
         return Segment::THIS;
     if (segment == "that")
         return Segment::THAT;
+    if (segment == "pointer")
+        return Segment::POINTER;
     if (segment == "static")
         return Segment::STATIC;
     if (segment == "temp")
@@ -34,28 +36,32 @@ string translatePush(string filename, Segment segment, int index)
         output << "@" << index << endl;
         output << "D=A" << endl;
         output << "@LCL" << endl;
-        output << "A=D+A" << endl;
+        output << "A=D+M" << endl;
         output << "D=M" << endl;
         break;
     case ARG:
         output << "@" << index << endl;
         output << "D=A" << endl;
         output << "@ARG" << endl;
-        output << "A=D+A" << endl;
+        output << "A=D+M" << endl;
         output << "D=M" << endl;
         break;
     case THIS:
         output << "@" << index << endl;
         output << "D=A" << endl;
         output << "@THIS" << endl;
-        output << "A=D+A" << endl;
+        output << "A=D+M" << endl;
         output << "D=M" << endl;
         break;
     case THAT:
         output << "@" << index << endl;
         output << "D=A" << endl;
         output << "@THAT" << endl;
-        output << "A=D+A" << endl;
+        output << "A=D+M" << endl;
+        output << "D=M" << endl;
+        break;
+    case POINTER:
+        output << (index == 0 ? "@THIS" : "@THAT") << endl;
         output << "D=M" << endl;
         break;
     case STATIC:
@@ -92,7 +98,7 @@ string translatePop(string filename, Segment segment, int index)
         output << "@" << index << endl;
         output << "D=A" << endl;
         output << "@LCL" << endl;
-        output << "D=D+A" << endl;
+        output << "D=D+M" << endl;
         output << "@ADDR" << endl;
         output << "M=D" << endl;
         break;
@@ -100,7 +106,7 @@ string translatePop(string filename, Segment segment, int index)
         output << "@" << index << endl;
         output << "D=A" << endl;
         output << "@ARG" << endl;
-        output << "D=D+A" << endl;
+        output << "D=D+M" << endl;
         output << "@ADDR" << endl;
         output << "M=D" << endl;
         break;
@@ -108,7 +114,7 @@ string translatePop(string filename, Segment segment, int index)
         output << "@" << index << endl;
         output << "D=A" << endl;
         output << "@THIS" << endl;
-        output << "D=D+A" << endl;
+        output << "D=D+M" << endl;
         output << "@ADDR" << endl;
         output << "M=D" << endl;
         break;
@@ -116,7 +122,13 @@ string translatePop(string filename, Segment segment, int index)
         output << "@" << index << endl;
         output << "D=A" << endl;
         output << "@THAT" << endl;
-        output << "D=D+A" << endl;
+        output << "D=D+M" << endl;
+        output << "@ADDR" << endl;
+        output << "M=D" << endl;
+        break;
+    case POINTER:
+        output << (index == 0 ? "@THIS" : "@THAT") << endl;
+        output << "D=A" << endl;
         output << "@ADDR" << endl;
         output << "M=D" << endl;
         break;

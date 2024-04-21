@@ -46,14 +46,39 @@ public:
             }
             else if (vec.size() == 1)
             {
-                if (vec.at(0) == "add")
+                switch (determineOperation(vec[0]))
+                {
+                case ADD:
                     file << translateAdd();
-
-                if (vec.at(0) == "sub")
+                    break;
+                case SUB:
                     file << translateSub();
-
-                if (vec.at(0) == "neg")
+                    break;
+                case NEG:
                     file << translateNeg();
+                    break;
+                case EQ:
+                    file << translateEq();
+                    break;
+                case GT:
+                    file << translateGt();
+                    break;
+                case LT:
+                    file << translateLt();
+                    break;
+                case AND:
+                    file << translateAnd();
+                    break;
+                case OR:
+                    file << translateOr();
+                    break;
+                case NOT:
+                    file << translateNot();
+                    break;
+                default:
+                    file << translateNeg();
+                    break;
+                }
             }
 
             file << endl;
