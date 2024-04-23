@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <ctime>
 
 using namespace std;
 
@@ -116,6 +117,10 @@ string translateEq()
 {
     stringstream output;
 
+    srand(static_cast<unsigned int>(time(nullptr)));
+
+    string LABEL = generateRandomLabel();
+
     output << "@SP" << endl;
     output << "M=M-1" << endl;
     output << "A=M" << endl;
@@ -130,25 +135,32 @@ string translateEq()
     output << "D=M" << endl;
 
     output << "@R" << endl;
-    output << "M=M-D" << endl;
-    output << "@TRUE" << endl;
-    output << "M;JEQ" << endl;
-    output << "@FALSE" << endl;
-    output << "M;JNE" << endl;
+    output << "M=D-M" << endl;
+    output << "D=M" << endl;
+    output << "@" << LABEL << "_TRUE" << endl;
+    output << "D;JEQ" << endl;
+    output << "@" << LABEL << "_FALSE" << endl;
+    output << "D;JNE" << endl;
 
-    output << "(TRUE)" << endl;
+    output << "(" << LABEL << "_TRUE)" << endl;
     output << "@SP" << endl;
     output << "A=M" << endl;
     output << "M=-1" << endl;
     output << "@SP" << endl;
     output << "M=M+1" << endl;
+    output << "@" << LABEL << endl;
+    output << "0;JMP" << endl;
 
-    output << "(FALSE)" << endl;
+    output << "(" << LABEL << "_FALSE)" << endl;
     output << "@SP" << endl;
     output << "A=M" << endl;
-    output << "M=-1" << endl;
+    output << "M=0" << endl;
     output << "@SP" << endl;
     output << "M=M+1" << endl;
+    output << "@" << LABEL << endl;
+    output << "0;JMP" << endl;
+
+    output << "(" << LABEL << ")" << endl;
 
     return output.str();
 }
@@ -157,6 +169,10 @@ string translateGt()
 {
     stringstream output;
 
+    srand(static_cast<unsigned int>(time(nullptr)));
+
+    string LABEL = generateRandomLabel();
+
     output << "@SP" << endl;
     output << "M=M-1" << endl;
     output << "A=M" << endl;
@@ -171,25 +187,34 @@ string translateGt()
     output << "D=M" << endl;
 
     output << "@R" << endl;
-    output << "M=M-D" << endl;
-    output << "@TRUE" << endl;
-    output << "M;JGT" << endl;
-    output << "@FALSE" << endl;
-    output << "M;JLT" << endl;
+    output << "M=D-M" << endl;
+    output << "D=M" << endl;
+    output << "@" << LABEL << "_TRUE" << endl;
+    output << "D;JGT" << endl;
+    output << "@" << LABEL << "_FALSE" << endl;
+    output << "D;JLT" << endl;
+    output << "@" << LABEL << "_FALSE" << endl;
+    output << "D;JEQ" << endl;
 
-    output << "(TRUE)" << endl;
+    output << "(" << LABEL << "_TRUE)" << endl;
     output << "@SP" << endl;
     output << "A=M" << endl;
     output << "M=-1" << endl;
     output << "@SP" << endl;
     output << "M=M+1" << endl;
+    output << "@" << LABEL << endl;
+    output << "0;JMP" << endl;
 
-    output << "(FALSE)" << endl;
+    output << "(" << LABEL << "_FALSE)" << endl;
     output << "@SP" << endl;
     output << "A=M" << endl;
-    output << "M=-1" << endl;
+    output << "M=0" << endl;
     output << "@SP" << endl;
     output << "M=M+1" << endl;
+    output << "@" << LABEL << endl;
+    output << "0;JMP" << endl;
+
+    output << "(" << LABEL << ")" << endl;
 
     return output.str();
 }
@@ -198,6 +223,10 @@ string translateLt()
 {
     stringstream output;
 
+    srand(static_cast<unsigned int>(time(nullptr)));
+
+    string LABEL = generateRandomLabel();
+
     output << "@SP" << endl;
     output << "M=M-1" << endl;
     output << "A=M" << endl;
@@ -212,25 +241,34 @@ string translateLt()
     output << "D=M" << endl;
 
     output << "@R" << endl;
-    output << "M=M-D" << endl;
-    output << "@TRUE" << endl;
-    output << "M;JLT" << endl;
-    output << "@FALSE" << endl;
-    output << "M;JGT" << endl;
+    output << "M=D-M" << endl;
+    output << "D=M" << endl;
+    output << "@" << LABEL << "_TRUE" << endl;
+    output << "D;JLT" << endl;
+    output << "@" << LABEL << "_FALSE" << endl;
+    output << "D;JGT" << endl;
+    output << "@" << LABEL << "_FALSE" << endl;
+    output << "D;JEQ" << endl;
 
-    output << "(TRUE)" << endl;
+    output << "(" << LABEL << "_TRUE)" << endl;
     output << "@SP" << endl;
     output << "A=M" << endl;
     output << "M=-1" << endl;
     output << "@SP" << endl;
     output << "M=M+1" << endl;
+    output << "@" << LABEL << endl;
+    output << "0;JMP" << endl;
 
-    output << "(FALSE)" << endl;
+    output << "(" << LABEL << "_FALSE)" << endl;
     output << "@SP" << endl;
     output << "A=M" << endl;
-    output << "M=-1" << endl;
+    output << "M=0" << endl;
     output << "@SP" << endl;
     output << "M=M+1" << endl;
+    output << "@" << LABEL << endl;
+    output << "0;JMP" << endl;
+
+    output << "(" << LABEL << ")" << endl;
 
     return output.str();
 }

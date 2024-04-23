@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include "types.h"
+#include "utils.h"
 #include "operations.h"
 #include "memory.h"
 
@@ -80,8 +81,6 @@ public:
                     break;
                 }
             }
-
-            file << endl;
         }
     }
 
