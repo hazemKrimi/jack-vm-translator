@@ -34,8 +34,6 @@ int main(int argc, char* argv[])
     Code code(translatedPath, commands);
 
     code.translate();
-
-    parser.closeFile();    
-    code.closeFile();    
+ 
     return 0;
 }

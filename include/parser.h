@@ -4,7 +4,7 @@
 #include <regex>
 #include <fstream>
 #include <cctype>
-#include <vector>
+#include "utils.h"
 
 using namespace std;
 
@@ -37,15 +37,23 @@ private:
                 if (!isEmptyLine(matched[1]))
                 {
                     string command = matched[1];
+
+                    trim(command);
                     vmCode.append(command + '\n');
                 }
                 continue;
             }
             else
             {
+                trim(text);
                 vmCode.append(text + '\n');
             }
         }
+    }
+
+    void closeFile()
+    {
+        file.close();
     }
 
 public:
@@ -73,6 +81,11 @@ public:
                 matchedVector.push_back(matched[2]);
                 matchedVector.push_back(matched[3]);
             }
+            else if (regex_search(text, matched, regex("^(.*) (.*)")))
+            {
+                matchedVector.push_back(matched[1]);
+                matchedVector.push_back(matched[2]);
+            }
             else if (regex_search(text, matched, regex("^(.*)")))
             {
                 matchedVector.push_back(matched[1]);
@@ -81,9 +94,5 @@ public:
         }
 
         return commands;
-    }
-
-    void closeFile() {
-        file.close();
     }
 };

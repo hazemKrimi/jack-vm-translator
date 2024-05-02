@@ -2,9 +2,9 @@
 #include <fstream>
 #include <string>
 #include "types.h"
-#include "utils.h"
 #include "operations.h"
 #include "memory.h"
+#include "branching.h"
 
 using namespace std;
 
@@ -14,6 +14,11 @@ private:
     ofstream file;
     string filename;
     vector<vector<string>> commands;
+
+    void closeFile()
+    {
+        file.close();
+    }
 
 public:
     Code(string path, vector<vector<string>> tokens)
@@ -30,6 +35,11 @@ public:
         commands = tokens;
     }
 
+    ~Code()
+    {
+        closeFile();
+    }
+
     void translate()
     {
         for (const vector<string> &vec : commands)
@@ -43,6 +53,21 @@ public:
                 if (vec[0] == "pop")
                 {
                     file << translatePop(filename, determineSegment(vec[1]), stoi(vec[2]));
+                }
+            }
+            else if (vec.size() == 2)
+            {
+                if (vec[0] == "label")
+                {
+                    file << translateLabel(vec[1]);
+                }
+                if (vec[0] == "goto")
+                {
+                    file << translateGoto(vec[1]);
+                }
+                if (vec[0] == "if-goto")
+                {
+                    file << translateIfGoto(vec[1]);
                 }
             }
             else if (vec.size() == 1)
@@ -82,10 +107,5 @@ public:
                 }
             }
         }
-    }
-
-    void closeFile()
-    {
-        file.close();
     }
 };
