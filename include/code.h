@@ -1,6 +1,8 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include "types.h"
+#include "utils.h"
 #include "operations.h"
 #include "memory.h"
 #include "branching.h"
