@@ -10,8 +10,7 @@ enum Segment
     POINTER,
 };
 
-enum Operation
-{
+enum NoArgumentCommand {
     ADD,
     SUB,
     NEG,
@@ -21,4 +20,15 @@ enum Operation
     AND,
     OR,
     NOT
+};
+
+enum OneArgumentCommand {
+    LABEL,
+    GOTO,
+    IFGOTO,
+};
+
+enum TwoArgumentCommand {
+    PUSH,
+    POP
 };

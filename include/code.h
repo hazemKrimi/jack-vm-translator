@@ -1,7 +1,6 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include "types.h"
 #include "operations.h"
 #include "memory.h"
 #include "branching.h"
@@ -46,33 +45,35 @@ public:
         {
             if (vec.size() == 3)
             {
-                if (vec[0] == "push")
+                switch (determineTwoArgumentCommand(vec[0]))
                 {
+                case PUSH:
                     file << translatePush(filename, determineSegment(vec[1]), stoi(vec[2]));
-                }
-                if (vec[0] == "pop")
-                {
+                    break;
+                case POP:
+                default:
                     file << translatePop(filename, determineSegment(vec[1]), stoi(vec[2]));
                 }
             }
             else if (vec.size() == 2)
             {
-                if (vec[0] == "label")
+                switch (determineOneArgumentCommand(vec[0]))
                 {
+                case LABEL:
                     file << translateLabel(vec[1]);
-                }
-                if (vec[0] == "goto")
-                {
+                    break;
+                case GOTO:
                     file << translateGoto(vec[1]);
-                }
-                if (vec[0] == "if-goto")
-                {
+                    break;
+                case IFGOTO:
+                default:
                     file << translateIfGoto(vec[1]);
+                    break;
                 }
             }
             else if (vec.size() == 1)
             {
-                switch (determineOperation(vec[0]))
+                switch (determineNoArgumentCommand(vec[0]))
                 {
                 case ADD:
                     file << translateAdd();

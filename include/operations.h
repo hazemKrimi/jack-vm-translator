@@ -5,30 +5,6 @@
 
 using namespace std;
 
-Operation determineOperation(string operation)
-{
-    if (operation == "add")
-        return Operation::ADD;
-    if (operation == "sub")
-        return Operation::SUB;
-    if (operation == "neg")
-        return Operation::NEG;
-    if (operation == "eq")
-        return Operation::EQ;
-    if (operation == "gt")
-        return Operation::GT;
-    if (operation == "lt")
-        return Operation::LT;
-    if (operation == "and")
-        return Operation::AND;
-    if (operation == "or")
-        return Operation::OR;
-    if (operation == "not")
-        return Operation::NOT;
-
-    return Operation::NEG;
-}
-
 string translateAdd()
 {
     stringstream output;

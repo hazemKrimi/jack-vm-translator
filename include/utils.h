@@ -34,3 +34,49 @@ string generateRandomLabel() {
 
     return label;
 }
+
+NoArgumentCommand determineNoArgumentCommand(string command)
+{
+    if (command == "add")
+        return NoArgumentCommand::ADD;
+    if (command == "sub")
+        return NoArgumentCommand::SUB;
+    if (command == "neg")
+        return NoArgumentCommand::NEG;
+    if (command == "eq")
+        return NoArgumentCommand::EQ;
+    if (command == "gt")
+        return NoArgumentCommand::GT;
+    if (command == "lt")
+        return NoArgumentCommand::LT;
+    if (command == "and")
+        return NoArgumentCommand::AND;
+    if (command == "or")
+        return NoArgumentCommand::OR;
+    if (command == "not")
+        return NoArgumentCommand::NOT;
+
+    return NoArgumentCommand::NEG;
+}
+
+OneArgumentCommand determineOneArgumentCommand(string command)
+{
+    if (command == "label")
+        return OneArgumentCommand::LABEL;
+    if (command == "goto")
+        return OneArgumentCommand::GOTO;
+    if (command == "if-goto")
+        return OneArgumentCommand::IFGOTO;
+
+    return OneArgumentCommand::IFGOTO;
+}
+
+TwoArgumentCommand determineTwoArgumentCommand(string command)
+{
+    if (command == "push")
+        return TwoArgumentCommand::PUSH;
+    if (command == "pop")
+        return TwoArgumentCommand::POP;
+
+    return TwoArgumentCommand::POP;
+}

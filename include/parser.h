@@ -4,6 +4,7 @@
 #include <regex>
 #include <fstream>
 #include <cctype>
+#include "types.h"
 #include "utils.h"
 
 using namespace std;
