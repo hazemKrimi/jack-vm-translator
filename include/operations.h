@@ -95,7 +95,7 @@ string translateEq()
 
     srand(static_cast<unsigned int>(time(nullptr)));
 
-    string LABEL = generateRandomLabel();
+    string LABEL = generateRandomLabel(8);
 
     output << "@SP" << endl;
     output << "M=M-1" << endl;
@@ -147,7 +147,7 @@ string translateGt()
 
     srand(static_cast<unsigned int>(time(nullptr)));
 
-    string LABEL = generateRandomLabel();
+    string LABEL = generateRandomLabel(8);
 
     output << "@SP" << endl;
     output << "M=M-1" << endl;
@@ -201,7 +201,7 @@ string translateLt()
 
     srand(static_cast<unsigned int>(time(nullptr)));
 
-    string LABEL = generateRandomLabel();
+    string LABEL = generateRandomLabel(8);
 
     output << "@SP" << endl;
     output << "M=M-1" << endl;

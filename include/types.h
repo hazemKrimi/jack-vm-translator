@@ -21,7 +21,8 @@ enum NoArgumentCommand {
     LT,
     AND,
     OR,
-    NOT
+    NOT,
+    RETURN,
 };
 
 enum OneArgumentCommand {
@@ -32,5 +33,7 @@ enum OneArgumentCommand {
 
 enum TwoArgumentCommand {
     PUSH,
-    POP
+    POP,
+    FUNCTION,
+    CALL
 };

@@ -24,13 +24,35 @@ inline void trim(string &str) {
     ltrim(str);
 }
 
-string generateRandomLabel() {
+Segment determineSegment(string segment)
+{
+    if (segment == "local")
+        return Segment::LCL;
+    if (segment == "argument")
+        return Segment::ARG;
+    if (segment == "this")
+        return Segment::THIS;
+    if (segment == "that")
+        return Segment::THAT;
+    if (segment == "pointer")
+        return Segment::POINTER;
+    if (segment == "static")
+        return Segment::STATIC;
+    if (segment == "temp")
+        return Segment::TEMP;
+    if (segment == "constant")
+        return Segment::CONSTANT;
+
+    return Segment::CONSTANT;
+}
+
+string generateRandomLabel(int length) {
     random_device rd;
     mt19937 gen(rd());
     uniform_int_distribution<> dis('A', 'Z');
     string label;
     
-    for (int i = 0; i < 8; ++i) {
+    for (int i = 0; i < length; ++i) {
         label += static_cast<char>(dis(gen));
     }
 
@@ -57,6 +79,8 @@ NoArgumentCommand determineNoArgumentCommand(string command)
         return NoArgumentCommand::OR;
     if (command == "not")
         return NoArgumentCommand::NOT;
+    if (command == "return")
+        return NoArgumentCommand::RETURN;
 
     return NoArgumentCommand::NEG;
 }
@@ -79,6 +103,10 @@ TwoArgumentCommand determineTwoArgumentCommand(string command)
         return TwoArgumentCommand::PUSH;
     if (command == "pop")
         return TwoArgumentCommand::POP;
+    if (command == "function")
+        return TwoArgumentCommand::FUNCTION;
+    if (command == "call")
+        return TwoArgumentCommand::CALL;
 
     return TwoArgumentCommand::POP;
 }

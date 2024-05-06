@@ -6,6 +6,7 @@
 #include "operations.h"
 #include "memory.h"
 #include "branching.h"
+#include "functions.h"
 
 using namespace std;
 
