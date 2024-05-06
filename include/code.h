@@ -53,6 +53,12 @@ public:
                 case PUSH:
                     file << translatePush(filename, determineSegment(vec[1]), stoi(vec[2]));
                     break;
+                case FUNCTION:
+                    file << translateFunction(vec[1], stoi(vec[2]));
+                    break;
+                case CALL:
+                    file << translateCall(vec[1], stoi(vec[2]));
+                    break;
                 case POP:
                 default:
                     file << translatePop(filename, determineSegment(vec[1]), stoi(vec[2]));
@@ -104,6 +110,9 @@ public:
                     break;
                 case NOT:
                     file << translateNot();
+                    break;
+                case RETURN:
+                    file << translateReturn();
                     break;
                 default:
                     file << translateNeg();
