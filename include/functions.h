@@ -4,12 +4,14 @@
 
 using namespace std;
 
-string translateFunction(string name, int args) {
+string translateFunction(string name, int args)
+{
     stringstream output;
 
     output << "(" << name << ")" << endl;
 
-    for (int i = 0; i < args; ++i) {
+    for (int i = 0; i < args; i++)
+    {
         output << "@0" << endl;
         output << "D=A" << endl;
         output << "@SP" << endl;
@@ -22,10 +24,10 @@ string translateFunction(string name, int args) {
     return output.str();
 }
 
-string translateCall(string name, int args) {
+string translateCall(string name, int args)
+{
     stringstream output;
     string label = name + "$ret" + generateRandomLabel(3);
-    vector<string> frame = { "LCL", "ARG", "THIS", "THAT" };
 
     output << "@" << label << endl;
     output << "D=A" << endl;
@@ -35,20 +37,38 @@ string translateCall(string name, int args) {
     output << "@SP" << endl;
     output << "M=M+1" << endl;
 
-    for (const string &segment : frame) {
-        output << "@" << segment << endl;
-        output << "D=M" << endl;
-        output << "@SP" << endl;
-        output << "A=M" << endl;
-        output << "M=D" << endl;
-        output << "@SP" << endl;
-        output << "M=M+1" << endl;
-    }
-
-    output << "@SP" << endl;
-    output << "D=M" << endl;
     output << "@LCL" << endl;
+    output << "D=M" << endl;
+    output << "@SP" << endl;
+    output << "A=M" << endl;
     output << "M=D" << endl;
+    output << "@SP" << endl;
+    output << "M=M+1" << endl;
+    
+    output << "@ARG" << endl;
+    output << "D=M" << endl;
+    output << "@SP" << endl;
+    output << "A=M" << endl;
+    output << "M=D" << endl;
+    output << "@SP" << endl;
+    output << "M=M+1" << endl;
+    
+    output << "@THIS" << endl;
+    output << "D=M" << endl;
+    output << "@SP" << endl;
+    output << "A=M" << endl;
+    output << "M=D" << endl;
+    output << "@SP" << endl;
+    output << "M=M+1" << endl;
+    
+    output << "@THAT" << endl;
+    output << "D=M" << endl;
+    output << "@SP" << endl;
+    output << "A=M" << endl;
+    output << "M=D" << endl;
+    output << "@SP" << endl;
+    output << "M=M+1" << endl;
+
     output << "@SP" << endl;
     output << "D=M" << endl;
     output << "@R" << endl;
@@ -64,7 +84,11 @@ string translateCall(string name, int args) {
     output << "D=M" << endl;
     output << "@ARG" << endl;
     output << "M=D" << endl;
-    output << "@R" << endl;
+
+    output << "@SP" << endl;
+    output << "D=M" << endl;
+    output << "@LCL" << endl;
+    output << "M=D" << endl;
 
     output << "@" << name << endl;
     output << "0;JMP" << endl;
@@ -73,7 +97,8 @@ string translateCall(string name, int args) {
     return output.str();
 }
 
-string translateReturn() {
+string translateReturn()
+{
     stringstream output;
     string cleanupLabel = "cleanup$ret" + generateRandomLabel(3);
     string endLabel = "end$ret" + generateRandomLabel(3);
@@ -119,7 +144,7 @@ string translateReturn() {
     output << "D=M" << endl;
     output << "@THAT" << endl;
     output << "M=D" << endl;
-    
+
     output << "@END_FRAME" << endl;
     output << "D=M" << endl;
     output << "@2" << endl;
@@ -128,7 +153,7 @@ string translateReturn() {
     output << "D=M" << endl;
     output << "@THIS" << endl;
     output << "M=D" << endl;
-    
+
     output << "@END_FRAME" << endl;
     output << "D=M" << endl;
     output << "@3" << endl;

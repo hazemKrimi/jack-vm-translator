@@ -4,7 +4,7 @@ This is a VM Translator made as the an assignment for the [Nand To Tetris Course
 
 To compile the program run the following command:
 ```
-g++ main.cpp -Isrc
+g++ main.cpp -Isrc -std=c++17
 ```
 To run the executable against jack vm files run the following command with the path of the file:
 ```

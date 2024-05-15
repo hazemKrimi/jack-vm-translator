@@ -23,7 +23,7 @@ private:
     }
 
 public:
-    Code(string path, vector<vector<string>> tokens)
+    Code(string path, vector<vector<string>> tokens, bool isNew)
     {
         size_t slashIndex = path.find_last_of('/');
         size_t dotIndex = path.find_last_of('.');
@@ -33,8 +33,16 @@ public:
             filename = path.substr(slashIndex + 1, dotIndex - slashIndex - 1);
         }
 
-        file = ofstream(path);
+        file = ofstream(path, isNew ? ios_base::out : ios_base::app);
         commands = tokens;
+
+        if (isNew) {
+            file << "@256" << endl;
+            file << "D=A" << endl;
+            file << "@SP" << endl;
+            file << "M=D" << endl;
+            file << translateCall("Sys.init", 0);
+        }
     }
 
     ~Code()
