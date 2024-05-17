@@ -4,7 +4,7 @@
 
 using namespace std;
 
-int callCounter = 0;
+int callCounter = 1;
 
 string translateFunction(string name, int args)
 {
@@ -12,7 +12,7 @@ string translateFunction(string name, int args)
 
     output << "(" << name << ")" << endl;
 
-    for (int i = 0; i < args; i++)
+    for (int i = 0; i < args; ++i)
     {
         output << "@0" << endl;
         output << "D=A" << endl;
