@@ -4,6 +4,8 @@
 
 using namespace std;
 
+int callCounter = 0;
+
 string translateFunction(string name, int args)
 {
     stringstream output;
@@ -27,7 +29,9 @@ string translateFunction(string name, int args)
 string translateCall(string name, int args)
 {
     stringstream output;
-    string label = name + "$ret" + generateRandomLabel(3);
+    string label = name + "$ret" + std::to_string(callCounter);
+
+    callCounter++;
 
     output << "@" << label << endl;
     output << "D=A" << endl;
@@ -71,15 +75,15 @@ string translateCall(string name, int args)
 
     output << "@SP" << endl;
     output << "D=M" << endl;
-    output << "@R" << endl;
+    output << "@C" << endl;
     output << "M=D" << endl;
     output << "@5" << endl;
     output << "D=A" << endl;
-    output << "@R" << endl;
+    output << "@C" << endl;
     output << "M=M-D" << endl;
     output << "@" << args << endl;
     output << "D=A" << endl;
-    output << "@R" << endl;
+    output << "@C" << endl;
     output << "M=M-D" << endl;
     output << "D=M" << endl;
     output << "@ARG" << endl;
@@ -100,23 +104,21 @@ string translateCall(string name, int args)
 string translateReturn()
 {
     stringstream output;
-    string cleanupLabel = "cleanup$ret" + generateRandomLabel(3);
-    string endLabel = "end$ret" + generateRandomLabel(3);
 
     output << "@LCL" << endl;
     output << "D=M" << endl;
-    output << "@END_FRAME" << endl;
+    output << "@EF" << endl;
     output << "M=D" << endl;
 
-    output << "@RETURN_ADDR" << endl;
+    output << "@RA" << endl;
     output << "M=D" << endl;
     output << "@5" << endl;
     output << "D=A" << endl;
-    output << "@RETURN_ADDR" << endl;
+    output << "@RA" << endl;
     output << "M=M-D" << endl;
     output << "A=M" << endl;
     output << "D=M" << endl;
-    output << "@RETURN_ADDR" << endl;
+    output << "@RA" << endl;
     output << "M=D" << endl;
 
     output << "@ARG" << endl;
@@ -136,7 +138,7 @@ string translateReturn()
     output << "@SP" << endl;
     output << "M=D" << endl;
 
-    output << "@END_FRAME" << endl;
+    output << "@EF" << endl;
     output << "D=M" << endl;
     output << "@1" << endl;
     output << "D=D-A" << endl;
@@ -145,7 +147,7 @@ string translateReturn()
     output << "@THAT" << endl;
     output << "M=D" << endl;
 
-    output << "@END_FRAME" << endl;
+    output << "@EF" << endl;
     output << "D=M" << endl;
     output << "@2" << endl;
     output << "D=D-A" << endl;
@@ -154,7 +156,7 @@ string translateReturn()
     output << "@THIS" << endl;
     output << "M=D" << endl;
 
-    output << "@END_FRAME" << endl;
+    output << "@EF" << endl;
     output << "D=M" << endl;
     output << "@3" << endl;
     output << "D=D-A" << endl;
@@ -163,7 +165,7 @@ string translateReturn()
     output << "@ARG" << endl;
     output << "M=D" << endl;
 
-    output << "@END_FRAME" << endl;
+    output << "@EF" << endl;
     output << "D=M" << endl;
     output << "@4" << endl;
     output << "D=D-A" << endl;
@@ -172,7 +174,7 @@ string translateReturn()
     output << "@LCL" << endl;
     output << "M=D" << endl;
 
-    output << "@RETURN_ADDR" << endl;
+    output << "@RA" << endl;
     output << "D=M" << endl;
     output << "D;JMP" << endl;
 

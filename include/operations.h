@@ -14,7 +14,7 @@ string translateAdd()
     output << "A=M" << endl;
     output << "D=M" << endl;
 
-    output << "@R" << endl;
+    output << "@A" << endl;
     output << "M=D" << endl;
 
     output << "@SP" << endl;
@@ -22,7 +22,7 @@ string translateAdd()
     output << "A=M" << endl;
     output << "D=M" << endl;
 
-    output << "@R" << endl;
+    output << "@A" << endl;
     output << "M=D+M" << endl;
     output << "D=M" << endl;
 
@@ -44,7 +44,7 @@ string translateSub()
     output << "A=M" << endl;
     output << "D=M" << endl;
 
-    output << "@R" << endl;
+    output << "@S" << endl;
     output << "M=D" << endl;
 
     output << "@SP" << endl;
@@ -52,7 +52,7 @@ string translateSub()
     output << "A=M" << endl;
     output << "D=M" << endl;
 
-    output << "@R" << endl;
+    output << "@S" << endl;
     output << "M=D-M" << endl;
     output << "D=M" << endl;
 
@@ -74,7 +74,7 @@ string translateNeg()
     output << "A=M" << endl;
     output << "D=M" << endl;
 
-    output << "@R" << endl;
+    output << "@N" << endl;
     output << "M=D" << endl;
     output << "M=M-D" << endl;
     output << "M=M-D" << endl;
@@ -102,7 +102,7 @@ string translateEq()
     output << "A=M" << endl;
     output << "D=M" << endl;
 
-    output << "@R" << endl;
+    output << "@E" << endl;
     output << "M=D" << endl;
 
     output << "@SP" << endl;
@@ -110,7 +110,7 @@ string translateEq()
     output << "A=M" << endl;
     output << "D=M" << endl;
 
-    output << "@R" << endl;
+    output << "@E" << endl;
     output << "M=D-M" << endl;
     output << "D=M" << endl;
     output << "@" << LABEL << "_TRUE" << endl;
@@ -154,7 +154,7 @@ string translateGt()
     output << "A=M" << endl;
     output << "D=M" << endl;
 
-    output << "@R" << endl;
+    output << "@GT" << endl;
     output << "M=D" << endl;
 
     output << "@SP" << endl;
@@ -162,7 +162,7 @@ string translateGt()
     output << "A=M" << endl;
     output << "D=M" << endl;
 
-    output << "@R" << endl;
+    output << "@GT" << endl;
     output << "M=D-M" << endl;
     output << "D=M" << endl;
     output << "@" << LABEL << "_TRUE" << endl;
@@ -208,7 +208,7 @@ string translateLt()
     output << "A=M" << endl;
     output << "D=M" << endl;
 
-    output << "@R" << endl;
+    output << "@LT" << endl;
     output << "M=D" << endl;
 
     output << "@SP" << endl;
@@ -216,7 +216,7 @@ string translateLt()
     output << "A=M" << endl;
     output << "D=M" << endl;
 
-    output << "@R" << endl;
+    output << "@LT" << endl;
     output << "M=D-M" << endl;
     output << "D=M" << endl;
     output << "@" << LABEL << "_TRUE" << endl;
@@ -258,7 +258,7 @@ string translateAnd()
     output << "A=M" << endl;
     output << "D=M" << endl;
 
-    output << "@R" << endl;
+    output << "@AND" << endl;
     output << "M=D" << endl;
 
     output << "@SP" << endl;
@@ -266,7 +266,7 @@ string translateAnd()
     output << "A=M" << endl;
     output << "D=M" << endl;
 
-    output << "@R" << endl;
+    output << "@AND" << endl;
     output << "M=D&M" << endl;
     output << "D=M" << endl;
 
@@ -288,7 +288,7 @@ string translateOr()
     output << "A=M" << endl;
     output << "D=M" << endl;
 
-    output << "@R" << endl;
+    output << "@OR" << endl;
     output << "M=D" << endl;
 
     output << "@SP" << endl;
@@ -296,7 +296,7 @@ string translateOr()
     output << "A=M" << endl;
     output << "D=M" << endl;
 
-    output << "@R" << endl;
+    output << "@OR" << endl;
     output << "M=D|M" << endl;
     output << "D=M" << endl;
 
