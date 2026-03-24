@@ -1,13 +1,3 @@
 # Jack Compiler
 
 This is a compiler made as the an assignment for the [Nand To Tetris Course: Part 2](https://nand2tetris.org/project07). It assumes that the jack file does not have errors for now.
-
-To compile the program run the following command:
-```
-g++ main.cpp -Isrc -std=c++17
-```
-To run the executable against jack vm files run the following command with the path of the file:
-```
-./a.out <path>
-```
-The file will be written next to the source file.
