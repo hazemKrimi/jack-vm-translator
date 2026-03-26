@@ -2,7 +2,7 @@ CC = g++
 TARGET_NAME = vm-translator
 OUT_DIR = out
 TARGET = $(OUT_DIR)/$(TARGET_NAME)
-SRCS = src/main.cpp src/parser.cpp src/code.cpp src/utils.cpp
+SRCS = src/main.cpp src/utils.cpp src/linked-list.cpp src/parser.cpp
 OBJS = $(SRCS:src/%.cpp=$(OUT_DIR)/%.o)
 
 $(TARGET): $(OBJS)
