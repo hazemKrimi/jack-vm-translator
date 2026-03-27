@@ -2,6 +2,7 @@
 #include <iostream>
 #include <regex>
 #include <string>
+#include <vector>
 
 #include "parser.hpp"
 #include "utils.hpp"
@@ -10,7 +11,7 @@ int process(std::string source) {
   std::ifstream ifs(source);
   std::string line;
 
-  LinkedList<Command> *commands = nullptr;
+  std::vector<Command> commands;
 
   while (getline(ifs, line)) {
     if (isComment(line) || isEmptyLine(line))
@@ -18,8 +19,13 @@ int process(std::string source) {
 
     int parseResult;
 
-    if ((parseResult = parseCommand(commands, line)) != 0)
+    if ((parseResult = parseCommand(commands, line)) != 0) {
       return parseResult;
+    }
+  }
+
+  for (const Command &cmd : commands) {
+    std::cout << int(cmd.type) << " " << int(cmd.segment) << " " << cmd.index << std::endl;
   }
 
   return 0;

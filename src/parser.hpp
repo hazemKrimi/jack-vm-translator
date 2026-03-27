@@ -1,6 +1,6 @@
 #include <string>
+#include <vector>
 
-#include "linked-list.hpp"
 #include "types.hpp"
 
-int parseCommand(LinkedList<Command> *, std::string);
+int parseCommand(std::vector<Command>&, std::string);
