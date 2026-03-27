@@ -1,24 +1,21 @@
 #include <string>
 #include <unordered_map>
 
-enum CommandType {
+enum class CommandType {
   ADD,
   SUB,
   NEG,
-
   EQ,
   GT,
   LT,
-
   AND,
   OR,
   NOT,
-
   PUSH,
   POP,
 };
 
-enum SegmentType {
+enum class SegmentType {
   LCL,
   ARG,
   THIS,
@@ -47,7 +44,7 @@ std::unordered_map<std::string, SegmentType> const segmentTypes = {
 
 typedef struct {
   std::string line;
-  std::string type;
-  std::string segment;
+  CommandType type;
+  SegmentType segment;
   int index;
 } Command;
