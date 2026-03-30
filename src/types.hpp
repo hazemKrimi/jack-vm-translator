@@ -1,6 +1,8 @@
 #include <string>
 #include <unordered_map>
 
+#ifndef TYPES
+
 enum class CommandType {
   ADD,
   SUB,
@@ -48,3 +50,6 @@ typedef struct {
   SegmentType segment;
   int index;
 } Command;
+
+#define TYPES
+#endif
