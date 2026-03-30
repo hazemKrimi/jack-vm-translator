@@ -10,7 +10,7 @@ endif
 TARGET_NAME = vm-translator
 OUT_DIR = out
 TARGET = $(OUT_DIR)/$(TARGET_NAME)
-SRCS = src/main.cpp src/utils.cpp src/parser.cpp
+SRCS = src/main.cpp src/utils.cpp src/code.cpp src/parser.cpp
 OBJS = $(SRCS:src/%.cpp=$(OUT_DIR)/%.o)
 
 $(TARGET): $(OBJS)

@@ -4,12 +4,16 @@
 #include <string>
 #include <vector>
 
+#include "code.hpp"
 #include "parser.hpp"
 #include "utils.hpp"
 
 int process(std::string source) {
   std::ifstream ifs(source);
+  std::string out = source.substr(0, source.find_last_of('.')) + ".asm";
+  std::ofstream ofs(out);
   std::string line;
+  std::string output;
 
   std::vector<Command> commands;
 
@@ -25,9 +29,17 @@ int process(std::string source) {
   }
 
   for (const Command &cmd : commands) {
-    std::cout << int(cmd.type) << " " << int(cmd.segment) << " " << cmd.index << std::endl;
+    int translateResult;
+
+    if ((translateResult = translateCommand(output, cmd)) != 0) {
+      return translateResult;
+    }
+
+    ofs << output;
   }
 
+  ifs.close();
+  ofs.close();
   return 0;
 }
 
