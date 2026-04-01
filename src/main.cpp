@@ -10,8 +10,8 @@
 
 int process(std::string source) {
   std::ifstream ifs(source);
-  std::string out = source.substr(0, source.find_last_of('.')) + ".asm";
-  std::ofstream ofs(out);
+  std::string filename = source.substr(0, source.find_last_of('.'));
+  std::ofstream ofs(filename + ".asm", std::ofstream::trunc);
   std::string line;
   std::string output;
 
@@ -31,7 +31,7 @@ int process(std::string source) {
   for (const Command &cmd : commands) {
     int translateResult;
 
-    if ((translateResult = translateCommand(output, cmd)) != 0) {
+    if ((translateResult = translateCommand(output, filename, cmd)) != 0) {
       return translateResult;
     }
 
