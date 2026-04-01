@@ -44,10 +44,17 @@ std::unordered_map<std::string, SegmentType> const segmentTypes = {
     {"temp", SegmentType::TEMP},     {"pointer", SegmentType::POINTER},
 };
 
+std::unordered_map<std::string, std::string> const segmentNames = {
+    {"local", "LCL"}, {"argument", "ARG"}, {"this", "THIS"},
+    {"that", "THAT"}, {"static", "NONE"},  {"constant", "NONE"},
+    {"temp", "NONE"}, {"pointer", "NONE"},
+};
+
 typedef struct {
   std::string line;
-  CommandType type;
-  SegmentType segment;
+  CommandType commandType;
+  SegmentType segmentType;
+  std::string segmentName;
   int index;
 } Command;
 
