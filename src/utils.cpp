@@ -1,7 +1,8 @@
 #include <cctype>
+#include <iostream>
 #include <string>
 
-bool isEmptyLine(std::string line) {
+bool isEmptyLine(const std::string &line) {
   for (char c : line) {
     if (!isspace(c))
       return false;
@@ -10,4 +11,16 @@ bool isEmptyLine(std::string line) {
   return true;
 }
 
-bool isComment(std::string line) { return line[0] == '/' && line[1] == '/'; }
+bool isComment(const std::string &line) {
+  return line[0] == '/' && line[1] == '/';
+}
+
+std::string getFileNameFromPath(const std::string &path) {
+  std::string fileName = path.substr(path.find_last_of("/\\") + 1);
+
+  return fileName.substr(0, fileName.find_last_of('.'));
+}
+
+std::string getOutputPath(const std::string &path) {
+  return path.substr(0, path.find_last_of('.')) + ".asm";
+}

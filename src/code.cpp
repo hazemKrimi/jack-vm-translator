@@ -3,7 +3,7 @@
 #include <sstream>
 
 static int translateStackOperation(std::ostringstream &stream,
-                                   const std::string filename, Command cmd) {
+                                   const std::string programName, Command cmd) {
   switch (cmd.segmentType) {
   case SegmentType::LCL:
   case SegmentType::ARG:
@@ -36,7 +36,7 @@ static int translateStackOperation(std::ostringstream &stream,
 
     break;
   case SegmentType::STATIC:
-    stream << "@" << filename << "." << cmd.index << std::endl;
+    stream << "@" << programName << "." << cmd.index << std::endl;
 
     if (cmd.commandType == CommandType::PUSH) {
       stream << "D=M" << std::endl;
@@ -238,7 +238,7 @@ int translateBistwiseUnaryOperation(std::ostringstream &stream) {
   return 0;
 }
 
-int translateCommand(std::string &output, const std::string filename,
+int translateCommand(std::string &output, const std::string programName,
                      Command cmd) {
   std::ostringstream stream;
 
@@ -248,7 +248,7 @@ int translateCommand(std::string &output, const std::string filename,
   switch (cmd.commandType) {
   case CommandType::PUSH:
   case CommandType::POP:
-    translateStackOperation(stream, filename, cmd);
+    translateStackOperation(stream, programName, cmd);
     break;
   case CommandType::ADD:
   case CommandType::SUB:

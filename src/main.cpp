@@ -8,10 +8,10 @@
 #include "parser.hpp"
 #include "utils.hpp"
 
-int process(std::string source) {
-  std::ifstream ifs(source);
-  std::string filename = source.substr(0, source.find_last_of('.'));
-  std::ofstream ofs(filename + ".asm", std::ofstream::trunc);
+int process(std::string path) {
+  std::ifstream ifs(path);
+  std::ofstream ofs(getOutputPath(path), std::ofstream::trunc);
+  std::string programName = getFileNameFromPath(path);
   std::string line;
   std::string output;
 
@@ -31,7 +31,7 @@ int process(std::string source) {
   for (const Command &cmd : commands) {
     int translateResult;
 
-    if ((translateResult = translateCommand(output, filename, cmd)) != 0) {
+    if ((translateResult = translateCommand(output, programName, cmd)) != 0) {
       return translateResult;
     }
 
@@ -50,12 +50,10 @@ int main(int argc, char **argv) {
     exit(1);
   }
 
-  std::string source = argv[1];
-
-  if (!regex_match(source, std::regex("^.+\\.vm"))) {
+  if (!regex_match(argv[1], std::regex("^.+\\.vm"))) {
     std::cerr << "Source file is not a vm file!" << std::endl;
     exit(1);
   }
 
-  return process(source);
+  return process(argv[1]);
 }
