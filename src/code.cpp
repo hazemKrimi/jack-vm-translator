@@ -2,6 +2,25 @@
 #include <iostream>
 #include <sstream>
 
+static int pushFromDRegisterToStack(std::ostringstream &stream) {
+  stream << "@SP" << std::endl;
+  stream << "A=M" << std::endl;
+  stream << "M=D" << std::endl;
+  stream << "@SP" << std::endl;
+  stream << "M=M+1" << std::endl;
+
+  return 0;
+}
+
+static int popFromStackToDRegister(std::ostringstream &stream) {
+  stream << "@SP" << std::endl;
+  stream << "M=M-1" << std::endl;
+  stream << "A=M" << std::endl;
+  stream << "D=M" << std::endl;
+
+  return 0;
+}
+
 static int translateStackOperation(std::ostringstream &stream,
                                    const std::string programName, Command cmd) {
   switch (cmd.segmentType) {
@@ -89,20 +108,16 @@ static int translateStackOperation(std::ostringstream &stream,
   return 0;
 }
 
-int translateArithmeticBinaryOperation(std::ostringstream &stream,
-                                       Command cmd) {
-  stream << "@SP" << std::endl;
-  stream << "M=M-1" << std::endl;
-  stream << "A=M" << std::endl;
-  stream << "D=M" << std::endl;
+static int translateArithmeticBinaryOperation(std::ostringstream &stream,
+                                              Command cmd) {
+  if (popFromStackToDRegister(stream) != 0)
+    return 1;
 
   stream << "@BINARY_ARITHMETIC" << std::endl;
   stream << "M=D" << std::endl;
 
-  stream << "@SP" << std::endl;
-  stream << "M=M-1" << std::endl;
-  stream << "A=M" << std::endl;
-  stream << "D=M" << std::endl;
+  if (popFromStackToDRegister(stream) != 0)
+    return 1;
 
   stream << "@BINARY_ARITHMETIC" << std::endl;
 
@@ -113,20 +128,13 @@ int translateArithmeticBinaryOperation(std::ostringstream &stream,
   }
 
   stream << "D=M" << std::endl;
-  stream << "@SP" << std::endl;
-  stream << "A=M" << std::endl;
-  stream << "M=D" << std::endl;
-  stream << "@SP" << std::endl;
-  stream << "M=M+1" << std::endl;
 
-  return 0;
+  return pushFromDRegisterToStack(stream);
 }
 
-int translateArithmeticUnaryOperation(std::ostringstream &stream) {
-  stream << "@SP" << std::endl;
-  stream << "M=M-1" << std::endl;
-  stream << "A=M" << std::endl;
-  stream << "D=M" << std::endl;
+static int translateArithmeticUnaryOperation(std::ostringstream &stream) {
+  if (popFromStackToDRegister(stream) != 0)
+    return 1;
 
   stream << "@NEGATE" << std::endl;
   stream << "M=D" << std::endl;
@@ -134,40 +142,37 @@ int translateArithmeticUnaryOperation(std::ostringstream &stream) {
   stream << "M=M-D" << std::endl;
   stream << "D=M" << std::endl;
 
-  stream << "@SP" << std::endl;
-  stream << "A=M" << std::endl;
-  stream << "M=D" << std::endl;
-  stream << "@SP" << std::endl;
-  stream << "M=M+1" << std::endl;
-
-  return 0;
+  return pushFromDRegisterToStack(stream);
 }
 
-int translateEqualityOperation(std::ostringstream &stream, Command cmd) {
+static int translateEqualityOperation(std::ostringstream &stream, Command cmd) {
   static int equalityCheckLabelCounter = 0;
 
-  stream << "@SP" << std::endl;
-  stream << "M=M-1" << std::endl;
-  stream << "A=M" << std::endl;
-  stream << "D=M" << std::endl;
+  if (popFromStackToDRegister(stream) != 0)
+    return 1;
 
   stream << "@EQUALITY_CHECK" << std::endl;
   stream << "M=D" << std::endl;
 
-  stream << "@SP" << std::endl;
-  stream << "M=M-1" << std::endl;
-  stream << "A=M" << std::endl;
-  stream << "D=M" << std::endl;
+  if (popFromStackToDRegister(stream) != 0)
+    return 1;
 
   stream << "@EQUALITY_CHECK" << std::endl;
   stream << "M=D-M" << std::endl;
   stream << "D=M" << std::endl;
-  stream << "@" << "EQUALITY_CHECK_" << equalityCheckLabelCounter << "_TRUE" << std::endl;
-  stream << "D;" << (cmd.commandType == CommandType::GT ? "JGT" : cmd.commandType == CommandType::LT ? "JLT" : "JEQ") << std::endl;
-  stream << "@" << "EQUALITY_CHECK_" << equalityCheckLabelCounter << "_FALSE" << std::endl;
+  stream << "@" << "EQUALITY_CHECK_" << equalityCheckLabelCounter << "_TRUE"
+         << std::endl;
+  stream << "D;"
+         << (cmd.commandType == CommandType::GT   ? "JGT"
+             : cmd.commandType == CommandType::LT ? "JLT"
+                                                  : "JEQ")
+         << std::endl;
+  stream << "@" << "EQUALITY_CHECK_" << equalityCheckLabelCounter << "_FALSE"
+         << std::endl;
   stream << "0;JMP" << std::endl;
 
-  stream << "(" << "EQUALITY_CHECK_" << equalityCheckLabelCounter << "_TRUE)" << std::endl;
+  stream << "(" << "EQUALITY_CHECK_" << equalityCheckLabelCounter << "_TRUE)"
+         << std::endl;
   stream << "@SP" << std::endl;
   stream << "A=M" << std::endl;
   stream << "M=-1" << std::endl;
@@ -176,7 +181,8 @@ int translateEqualityOperation(std::ostringstream &stream, Command cmd) {
   stream << "@" << "EQUALITY_CHECK_" << equalityCheckLabelCounter << std::endl;
   stream << "0;JMP" << std::endl;
 
-  stream << "(" << "EQUALITY_CHECK_" << equalityCheckLabelCounter << "_FALSE)" << std::endl;
+  stream << "(" << "EQUALITY_CHECK_" << equalityCheckLabelCounter << "_FALSE)"
+         << std::endl;
   stream << "@SP" << std::endl;
   stream << "A=M" << std::endl;
   stream << "M=0" << std::endl;
@@ -185,25 +191,23 @@ int translateEqualityOperation(std::ostringstream &stream, Command cmd) {
   stream << "@" << "EQUALITY_CHECK_" << equalityCheckLabelCounter << std::endl;
   stream << "0;JMP" << std::endl;
 
-  stream << "(" << "EQUALITY_CHECK_" << equalityCheckLabelCounter << ")" << std::endl;
+  stream << "(" << "EQUALITY_CHECK_" << equalityCheckLabelCounter << ")"
+         << std::endl;
   equalityCheckLabelCounter++;
 
   return 0;
 }
 
-int translateBitwiseBinaryOperation(std::ostringstream &stream, Command cmd) {
-  stream << "@SP" << std::endl;
-  stream << "M=M-1" << std::endl;
-  stream << "A=M" << std::endl;
-  stream << "D=M" << std::endl;
+static int translateBitwiseBinaryOperation(std::ostringstream &stream,
+                                           Command cmd) {
+  if (popFromStackToDRegister(stream) != 0)
+    return 1;
 
   stream << "@BINARY_BITWISE" << std::endl;
   stream << "M=D" << std::endl;
 
-  stream << "@SP" << std::endl;
-  stream << "M=M-1" << std::endl;
-  stream << "A=M" << std::endl;
-  stream << "D=M" << std::endl;
+  if (popFromStackToDRegister(stream) != 0)
+    return 1;
 
   stream << "@BINARY_BITWISE" << std::endl;
 
@@ -214,20 +218,13 @@ int translateBitwiseBinaryOperation(std::ostringstream &stream, Command cmd) {
   }
 
   stream << "D=M" << std::endl;
-  stream << "@SP" << std::endl;
-  stream << "A=M" << std::endl;
-  stream << "M=D" << std::endl;
-  stream << "@SP" << std::endl;
-  stream << "M=M+1" << std::endl;
 
-  return 0;
+  return pushFromDRegisterToStack(stream);
 }
 
-int translateBistwiseUnaryOperation(std::ostringstream &stream) {
-  stream << "@SP" << std::endl;
-  stream << "M=M-1" << std::endl;
-  stream << "A=M" << std::endl;
-  stream << "D=M" << std::endl;
+static int translateBistwiseUnaryOperation(std::ostringstream &stream) {
+  if (popFromStackToDRegister(stream) != 0)
+    return 1;
 
   stream << "@SP" << std::endl;
   stream << "A=M" << std::endl;
