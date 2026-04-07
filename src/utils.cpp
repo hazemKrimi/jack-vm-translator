@@ -1,5 +1,4 @@
-#include <cctype>
-#include <iostream>
+#include <filesystem>
 #include <string>
 
 bool isEmptyLine(const std::string &line) {
@@ -22,5 +21,9 @@ std::string getFileNameFromPath(const std::string &path) {
 }
 
 std::string getOutputPath(const std::string &path) {
+  if (std::filesystem::is_directory(path)) {
+    return path + "/" + path.substr(path.find_last_of("/\\") + 1) + ".asm";
+  }
+
   return path.substr(0, path.find_last_of('.')) + ".asm";
 }

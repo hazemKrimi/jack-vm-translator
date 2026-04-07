@@ -22,7 +22,7 @@ static int popFromStackToDRegister(std::ostringstream &stream) {
 }
 
 static int translateStackOperation(std::ostringstream &stream,
-                                   const std::string programName, Command cmd) {
+                                   const std::string fileName, Command cmd) {
   switch (cmd.segmentType) {
   case SegmentType::LCL:
   case SegmentType::ARG:
@@ -55,7 +55,7 @@ static int translateStackOperation(std::ostringstream &stream,
 
     break;
   case SegmentType::STATIC:
-    stream << "@" << programName << "." << cmd.index << std::endl;
+    stream << "@" << fileName << "." << cmd.index << std::endl;
 
     if (cmd.commandType == CommandType::PUSH) {
       stream << "D=M" << std::endl;
@@ -235,7 +235,7 @@ static int translateBistwiseUnaryOperation(std::ostringstream &stream) {
   return 0;
 }
 
-int translateCommand(std::string &output, const std::string programName,
+int translateCommand(std::string &output, const std::string fileName,
                      Command cmd) {
   std::ostringstream stream;
 
@@ -245,7 +245,7 @@ int translateCommand(std::string &output, const std::string programName,
   switch (cmd.commandType) {
   case CommandType::PUSH:
   case CommandType::POP:
-    translateStackOperation(stream, programName, cmd);
+    translateStackOperation(stream, fileName, cmd);
     break;
   case CommandType::ADD:
   case CommandType::SUB:

@@ -1,3 +1,4 @@
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <regex>
@@ -8,10 +9,11 @@
 #include "parser.hpp"
 #include "utils.hpp"
 
-int process(std::string path) {
-  std::ifstream ifs(path);
-  std::ofstream ofs(getOutputPath(path), std::ofstream::trunc);
-  std::string programName = getFileNameFromPath(path);
+int process(std::string inputPath, std::string outputPath,
+            std::ios_base::openmode outputStreamMode) {
+  std::ifstream ifs(inputPath);
+  std::ofstream ofs(outputPath, outputStreamMode);
+  std::string fileName = getFileNameFromPath(inputPath);
   std::string line;
   std::string output;
 
@@ -31,7 +33,7 @@ int process(std::string path) {
   for (const Command &cmd : commands) {
     int translateResult;
 
-    if ((translateResult = translateCommand(output, programName, cmd)) != 0) {
+    if ((translateResult = translateCommand(output, fileName, cmd)) != 0) {
       return translateResult;
     }
 
@@ -50,10 +52,24 @@ int main(int argc, char **argv) {
     exit(1);
   }
 
-  if (!regex_match(argv[1], std::regex("^.+\\.vm"))) {
-    std::cerr << "Source file is not a vm file!" << std::endl;
+  if (regex_match(argv[1], std::regex("^.+\\.vm")))
+    return process(argv[1], getOutputPath(argv[1]), std::ofstream::trunc);
+
+  if (!std::filesystem::is_directory(argv[1])) {
+    std::cerr << "Argument is not a VM file!" << std::endl;
     exit(1);
   }
 
-  return process(argv[1]);
+  std::string outputPath = getOutputPath(argv[1]);
+
+  if (std::filesystem::exists(outputPath)) {
+    std::filesystem::remove(outputPath);
+  }
+
+  for (const auto &entry : std::filesystem::directory_iterator(argv[1])) {
+    if (entry.is_regular_file() && entry.path().extension() == ".vm") {
+      if (process(entry.path().string(), outputPath, std::ofstream::app) != 0)
+        exit(1);
+    }
+  }
 }
