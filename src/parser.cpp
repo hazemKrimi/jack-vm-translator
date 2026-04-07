@@ -15,9 +15,15 @@ int parseCommand(std::vector<Command> &commands, std::string line) {
       std::string segment = matched[2];
       cmd.line = line;
       cmd.commandType = commandTypes.at(matched[1]);
-      cmd.segmentType = segmentTypes.at(segment);
-      cmd.segmentName = segmentNames.at(segment);
       cmd.index = std::stoi(std::string(matched[3]));
+
+      if (cmd.commandType == CommandType::FUNCTION ||
+          cmd.commandType == CommandType::CALL) {
+        cmd.label = matched[2];
+      } else {
+        cmd.segmentType = segmentTypes.at(segment);
+        cmd.segmentName = segmentNames.at(segment);
+      }
     }
 
     commands.push_back(cmd);

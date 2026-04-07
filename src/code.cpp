@@ -258,6 +258,151 @@ static int translateIfGoTo(std::ostringstream &stream, Command cmd) {
   return 0;
 }
 
+static int translateFunctionDefinition(std::ostringstream &stream,
+                                       Command cmd) {
+  stream << "(" << cmd.label << ")" << std::endl;
+
+  for (int i = 0; i < cmd.index; ++i) {
+    stream << "@0" << std::endl;
+    stream << "D=A" << std::endl;
+
+    if (pushFromDRegisterToStack(stream) != 0)
+      return 1;
+  }
+
+  return 0;
+}
+
+int translateFunctionCall(std::ostringstream &stream, Command cmd) {
+  static int callCounter = 0;
+  std::string returnLabel = cmd.label + "$ret" + std::to_string(callCounter++);
+
+  stream << "@" << returnLabel << std::endl;
+  stream << "D=A" << std::endl;
+
+  if (pushFromDRegisterToStack(stream) != 0)
+    return 1;
+
+  stream << "@LCL" << std::endl;
+  stream << "D=M" << std::endl;
+
+  if (pushFromDRegisterToStack(stream) != 0)
+    return 1;
+
+  stream << "@ARG" << std::endl;
+  stream << "D=M" << std::endl;
+
+  if (pushFromDRegisterToStack(stream) != 0)
+    return 1;
+
+  stream << "@THIS" << std::endl;
+  stream << "D=M" << std::endl;
+
+  if (pushFromDRegisterToStack(stream) != 0)
+    return 1;
+
+  stream << "@THAT" << std::endl;
+  stream << "D=M" << std::endl;
+
+  if (pushFromDRegisterToStack(stream) != 0)
+    return 1;
+
+  stream << "@SP" << std::endl;
+  stream << "D=M" << std::endl;
+  stream << "@5" << std::endl;
+  stream << "D=D-A" << std::endl;
+  stream << "@" << cmd.index << std::endl;
+  stream << "D=D-A" << std::endl;
+  stream << "@ARG" << std::endl;
+  stream << "M=D" << std::endl;
+
+  stream << "@SP" << std::endl;
+  stream << "D=M" << std::endl;
+  stream << "@LCL" << std::endl;
+  stream << "M=D" << std::endl;
+
+  stream << "@" << cmd.label << std::endl;
+  stream << "0;JMP" << std::endl;
+  stream << "(" << returnLabel << ")" << std::endl;
+
+  return 0;
+}
+
+static int translateFunctionReturn(std::ostringstream &stream) {
+  stream << "@LCL" << std::endl;
+  stream << "D=M" << std::endl;
+  stream << "@FRAME" << std::endl;
+  stream << "M=D" << std::endl;
+
+  stream << "@5" << std::endl;
+  stream << "D=A" << std::endl;
+  stream << "@FRAME" << std::endl;
+  stream << "D=M-D" << std::endl;
+  stream << "A=D" << std::endl;
+  stream << "D=M" << std::endl;
+  stream << "@RETURN_ADDRESS" << std::endl;
+  stream << "M=D" << std::endl;
+
+  stream << "@ARG" << std::endl;
+  stream << "D=M" << std::endl;
+  stream << "@ADDR" << std::endl;
+  stream << "M=D" << std::endl;
+
+  if (popFromStackToDRegister(stream) != 0)
+    return 1;
+  
+  stream << "@ADDR" << std::endl;
+  stream << "A=M" << std::endl;
+  stream << "M=D" << std::endl;
+
+  stream << "@ARG" << std::endl;
+  stream << "D=M+1" << std::endl;
+  stream << "@SP" << std::endl;
+  stream << "M=D" << std::endl;
+
+  stream << "@FRAME" << std::endl;
+  stream << "D=M" << std::endl;
+  stream << "@1" << std::endl;
+  stream << "D=D-A" << std::endl;
+  stream << "A=D" << std::endl;
+  stream << "D=M" << std::endl;
+  stream << "@THAT" << std::endl;
+  stream << "M=D" << std::endl;
+
+  stream << "@FRAME" << std::endl;
+  stream << "D=M" << std::endl;
+  stream << "@2" << std::endl;
+  stream << "D=D-A" << std::endl;
+  stream << "A=D" << std::endl;
+  stream << "D=M" << std::endl;
+  stream << "@THIS" << std::endl;
+  stream << "M=D" << std::endl;
+
+  stream << "@FRAME" << std::endl;
+  stream << "D=M" << std::endl;
+  stream << "@3" << std::endl;
+  stream << "D=D-A" << std::endl;
+  stream << "A=D" << std::endl;
+  stream << "D=M" << std::endl;
+  stream << "@ARG" << std::endl;
+  stream << "M=D" << std::endl;
+
+  stream << "@FRAME" << std::endl;
+  stream << "D=M" << std::endl;
+  stream << "@4" << std::endl;
+  stream << "D=D-A" << std::endl;
+  stream << "A=D" << std::endl;
+  stream << "D=M" << std::endl;
+  stream << "@LCL" << std::endl;
+  stream << "M=D" << std::endl;
+
+  stream << "@RETURN_ADDRESS" << std::endl;
+  stream << "A=M" << std::endl;
+  stream << "M;JMP" << std::endl;
+
+  return 0;
+}
+
 int translateCommand(std::string &output, const std::string fileName,
                      Command cmd) {
   std::ostringstream stream;
@@ -297,6 +442,15 @@ int translateCommand(std::string &output, const std::string fileName,
     break;
   case CommandType::IFGOTO:
     translateIfGoTo(stream, cmd);
+    break;
+  case CommandType::FUNCTION:
+    translateFunctionDefinition(stream, cmd);
+    break;
+  case CommandType::CALL:
+    translateFunctionCall(stream, cmd);
+    break;
+  case CommandType::RETURN:
+    translateFunctionReturn(stream);
     break;
   default:
     break;
