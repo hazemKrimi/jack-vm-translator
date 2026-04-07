@@ -15,6 +15,12 @@ enum class CommandType {
   NOT,
   PUSH,
   POP,
+  LABEL,
+  GOTO,
+  IFGOTO,
+  FUNCTION,
+  CALL,
+  RETURN
 };
 
 enum class SegmentType {
@@ -29,13 +35,23 @@ enum class SegmentType {
 };
 
 std::unordered_map<std::string, CommandType> const commandTypes = {
-    {"add", CommandType::ADD}, {"sub", CommandType::SUB},
-    {"neg", CommandType::NEG}, {"eq", CommandType::EQ},
-    {"gt", CommandType::GT},   {"lt", CommandType::LT},
-    {"and", CommandType::AND}, {"or", CommandType::OR},
-    {"not", CommandType::NOT}, {"push", CommandType::PUSH},
+    {"add", CommandType::ADD},
+    {"sub", CommandType::SUB},
+    {"neg", CommandType::NEG},
+    {"eq", CommandType::EQ},
+    {"gt", CommandType::GT},
+    {"lt", CommandType::LT},
+    {"and", CommandType::AND},
+    {"or", CommandType::OR},
+    {"not", CommandType::NOT},
+    {"push", CommandType::PUSH},
     {"pop", CommandType::POP},
-};
+    {"label", CommandType::LABEL},
+    {"goto", CommandType::GOTO},
+    {"if-goto", CommandType::IFGOTO},
+    {"function", CommandType::FUNCTION},
+    {"call", CommandType::CALL},
+    {"return", CommandType::RETURN}};
 
 std::unordered_map<std::string, SegmentType> const segmentTypes = {
     {"local", SegmentType::LCL},     {"argument", SegmentType::ARG},
@@ -55,6 +71,7 @@ typedef struct {
   CommandType commandType;
   SegmentType segmentType;
   std::string segmentName;
+  std::string label;
   int index;
 } Command;
 

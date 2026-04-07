@@ -235,6 +235,29 @@ static int translateBistwiseUnaryOperation(std::ostringstream &stream) {
   return 0;
 }
 
+static int translateLabel(std::ostringstream &stream, Command cmd) {
+  stream << "(" << cmd.label << ")" << std::endl;
+
+  return 0;
+}
+
+static int translateGoTo(std::ostringstream &stream, Command cmd) {
+  stream << "@" << cmd.label << std::endl;
+  stream << "0;JMP" << std::endl;
+
+  return 0;
+}
+
+static int translateIfGoTo(std::ostringstream &stream, Command cmd) {
+  if (popFromStackToDRegister(stream) != 0)
+    return 1;
+
+  stream << "@" << cmd.label << std::endl;
+  stream << "D;JNE" << std::endl;
+
+  return 0;
+}
+
 int translateCommand(std::string &output, const std::string fileName,
                      Command cmd) {
   std::ostringstream stream;
@@ -265,6 +288,15 @@ int translateCommand(std::string &output, const std::string fileName,
     break;
   case CommandType::NOT:
     translateBistwiseUnaryOperation(stream);
+    break;
+  case CommandType::LABEL:
+    translateLabel(stream, cmd);
+    break;
+  case CommandType::GOTO:
+    translateGoTo(stream, cmd);
+    break;
+  case CommandType::IFGOTO:
+    translateIfGoTo(stream, cmd);
     break;
   default:
     break;

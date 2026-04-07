@@ -8,7 +8,7 @@
 int parseCommand(std::vector<Command> &commands, std::string line) {
   std::smatch matched;
 
-  if (regex_search(line, matched, std::regex("^(.*) (.*) (.*)"))) {
+  if (regex_search(line, matched, std::regex("^(\\S+)\\s+(\\S+)\\s+(\\S+)$"))) {
     Command cmd;
 
     if (matched.ready()) {
@@ -24,16 +24,31 @@ int parseCommand(std::vector<Command> &commands, std::string line) {
     return 0;
   }
 
-  if (regex_search(line, matched, std::regex("^(.*)"))) {
+  if (std::regex_search(line, matched, std::regex("^(\\S+)\\s+(\\S+)$"))) {
     Command cmd;
 
-    cmd.line = line;
-    cmd.commandType = commandTypes.at(matched[1]);
+    if (matched.ready()) {
+      cmd.line = line;
+      cmd.commandType = commandTypes.at(matched[1]);
+      cmd.label = matched[2];
+    }
 
     commands.push_back(cmd);
     return 0;
   }
 
-  std::cerr << "Incorrect vm command!" << std::endl;
+  if (regex_search(line, matched, std::regex("^(\\S+)$"))) {
+    Command cmd;
+
+    if (matched.ready()) {
+      cmd.line = line;
+      cmd.commandType = commandTypes.at(matched[1]);
+    }
+
+    commands.push_back(cmd);
+    return 0;
+  }
+
+  std::cerr << "Incorrect vm command: " << line << std::endl;
   return 1;
 }
