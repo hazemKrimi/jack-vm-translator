@@ -10,11 +10,29 @@ bool isEmptyLine(const std::string &line) {
   return true;
 }
 
-bool isComment(const std::string &line) {
-  return line[0] == '/' && line[1] == '/';
+int cleanupLine(std::string &line) {
+  size_t commentStartingPosition = line.find("//");
+
+  if (commentStartingPosition != std::string::npos) {
+    line = line.substr(0, commentStartingPosition);
+  }
+
+  size_t firstNonWhiteSpacePosition = line.find_first_not_of(" \t\n\r");
+
+  if (firstNonWhiteSpacePosition == std::string::npos) {
+    line = "";
+    return 0;
+  }
+
+  size_t lastNonWhiteSpacePosition = line.find_last_not_of(" \t\n\r");
+  line =
+      line.substr(firstNonWhiteSpacePosition,
+                  (lastNonWhiteSpacePosition - firstNonWhiteSpacePosition + 1));
+
+  return 0;
 }
 
-std::string getFileNameFromPath(const std::string &path) {
+std::string getFileNameFromFilePath(const std::string &path) {
   std::string fileName = path.substr(path.find_last_of("/\\") + 1);
 
   return fileName.substr(0, fileName.find_last_of('.'));

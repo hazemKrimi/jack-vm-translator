@@ -1,3 +1,4 @@
+#include <cstdlib>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
@@ -13,21 +14,21 @@ int process(std::string inputPath, std::string outputPath,
             std::ios_base::openmode outputStreamMode) {
   std::ifstream ifs(inputPath);
   std::ofstream ofs(outputPath, outputStreamMode);
-  std::string fileName = getFileNameFromPath(inputPath);
+  std::string fileName = getFileNameFromFilePath(inputPath);
   std::string line;
   std::string output;
 
   std::vector<Command> commands;
 
   while (getline(ifs, line)) {
-    if (isComment(line) || isEmptyLine(line))
+    if (cleanupLine(line) != 0)
+      exit(1);
+
+    if (isEmptyLine(line))
       continue;
 
-    int parseResult;
-
-    if ((parseResult = parseCommand(commands, line)) != 0) {
-      return parseResult;
-    }
+    if (parseCommand(commands, line) != 0)
+      exit(1);
   }
 
   for (const Command &cmd : commands) {
