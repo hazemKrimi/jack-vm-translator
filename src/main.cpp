@@ -13,6 +13,11 @@
 
 int process(std::string inputPath, std::string outputPath,
             std::ios_base::openmode outputStreamMode, bool &init) {
+  if (!std::filesystem::exists(inputPath)) {
+    std::cerr << "File does not exist!" << std::endl;
+    exit(1);
+  }
+
   std::ifstream ifs(inputPath);
   std::ofstream ofs(outputPath, outputStreamMode);
   std::string fileName = getFileNameFromFilePath(inputPath);
